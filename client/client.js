@@ -33,7 +33,7 @@ class QueueClient {
   async addMessage(queueName, body) {
     try {
       const response = await this.client.post(
-        `/queues/${queueName}/messages/`,
+        `/v1/queues/${queueName}/messages`,
         body
       );
       return response.data;
@@ -63,11 +63,14 @@ class QueueClient {
 
   async consumeMessages(queueName, subscriberName) {
     try {
-      const response = await this.client.get(`/queues/${queueName}/messages/`, {
-        headers: {
-          "X-Subscriber": subscriberName,
-        },
-      });
+      const response = await this.client.get(
+        `/v1/queues/${queueName}/messages`,
+        {
+          headers: {
+            "X-Subscriber": subscriberName,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Error in consumeMessages:", error);
