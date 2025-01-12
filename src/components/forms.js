@@ -4,11 +4,12 @@ import { queueClient } from "../../client/client";
 const SubscribeForm = () => {
   const [subscribeName, setSubscribeName] = useState("");
   const [subscribeQueue, setSubscribeQueue] = useState("");
+  const [response, setRespnse] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await queueClient.addSubscriber(subscribeQueue, subscribeName);
-    alert(res);
+    setRespnse(res);
   };
 
   return (
@@ -35,6 +36,7 @@ const SubscribeForm = () => {
         </div>
         <button type="submit">Subscribe</button>
       </form>
+      <div id="subscribeResponse">{response}</div>
     </div>
   );
 };
@@ -42,10 +44,12 @@ const SubscribeForm = () => {
 const ConsumeForm = () => {
   const [consumeName, setConsumeName] = useState("");
   const [consumeQueue, setConsumeQueue] = useState("");
+  const [messages, setMessages] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Предотвращает перезагрузку страницы
-    console.log(`Имя: ${consumeName}, Очередь: ${consumeQueue}`); // Вывод значений в консоль
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await queueClient.consumeMessages(consumeQueue, consumeName);
+    setMessages(res);
   };
 
   return (
@@ -72,6 +76,7 @@ const ConsumeForm = () => {
         </div>
         <button type="submit">Consume</button>
       </form>
+      <div id="consumeResponse">{JSON.stringify(messages)}</div>
     </div>
   );
 };
@@ -79,13 +84,14 @@ const ConsumeForm = () => {
 const PutMessageForm = () => {
   const [putMessage, setPutMessage] = useState("");
   const [putMessageQueue, setPutMessageQueue] = useState("");
+  const [response, setResponse] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await queueClient.addMessage(putMessageQueue, {
       msg: putMessage,
     });
-    window.alert(res);
+    setResponse(res);
   };
 
   return (
@@ -112,6 +118,7 @@ const PutMessageForm = () => {
         </div>
         <button type="submit">Put message</button>
       </form>
+      <div id="putMessageResponse">{response}</div>
     </div>
   );
 };
